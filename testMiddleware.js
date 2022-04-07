@@ -1,11 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const auth = require("basic-auth");
+const bodyParser = require("body-parser");
+
 
 const app = express();
 
+
+
+
 const authBasic = (req, res, next) => {
-    console.log(req);
+    //console.log(req);
     let usager = auth(req);
     if(usager && usager.name == "biero" && usager.pass == "biero"){
         next();
@@ -17,6 +22,7 @@ const authBasic = (req, res, next) => {
 
 
 app.use(cors());
+app.use(bodyParser.json());
 
 app.put("*", authBasic);
 app.post("*", authBasic);
@@ -26,6 +32,18 @@ app.delete("*", authBasic);
 app.get("/biere", (req,res, next)=>{
     res.send("Une biere, menoum");
 })
+
+app.put("/biere", (req, res)=>{
+    let data = req.body;
+    data.date_ajout = "";
+    data.date_modif = "";
+    data.commentaires = [];
+
+    // inséré dans mongodb....
+    console.log(req.body);
+
+
+});
 
 
 app.post("/biere/:id", (req, res)=>{
