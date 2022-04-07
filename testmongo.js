@@ -1,9 +1,32 @@
 // https://mongodb.github.io/node-mongodb-native/api-generated/mongoclient.html#connect
+// https://www.mongodb.com/docs/manual/crud/
+
 
 const express = require("express");
 const mongoClient = require("mongodb").MongoClient;
 
 const app = express();
+
+
+app.get("/ajouter", (req, res)=>{
+    mongoClient.connect("mongodb://localhost:27017/", (err, db)=>{
+        if(err) {
+            res.send("erreur 1");
+            throw err;
+        }
+        let database = db.db("db_biero");
+        let collection = database.collection("mesbiere");
+        let biere = {   
+                        nom : "ma biere " + parseInt(Math.random()*10), 
+                        brasserie : "ma brasserie"
+                    };
+        collection.insertOne(biere);
+
+        res.send("biere ajouté : " + biere);
+
+    })
+
+})
 
 
 
